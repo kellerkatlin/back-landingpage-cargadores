@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum SaleStatus {
+  CREATED
+  CANCELED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum FulfillmentStatus {
+  NOT_PREPARED
+  PREPARED
+  DISPATCHED
+  DELIVERED
+  RETURNED
+}
+
+model Customer {
+  id      String  @id @default(uuid())
+  name    String
+  lasName String?
+  email   String? @unique
+  phone   String?
+  dni     String?
+
+  direccion    String?
+  distrito     String?
+  provincia    String?
+  departamento String?
+  referencia   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sales     Sale[]
+}
+
+model Sale {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  quantity    Int
+  unitPrice   Float
+  subtotal    Float
+  totalAmount Float
+
+  saleStatus        SaleStatus        @default(CREATED)
+  paymentStatus     PaymentStatus     @default(UNPAID)
+  fulfillmentStatus FulfillmentStatus @default(NOT_PREPARED)
+
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payments     Payment[]
+  fulfillments FulfillmentEvent[]
+}
+
+model Payment {
+  id          String        @id @default(uuid())
+  saleId      String
+  sale        Sale          @relation(fields: [saleId], references: [id])
+  provider    String // p.ej. "MERCADO_PAGO" o "OFFLINE"
+  referenceId String? // id del pago en pasarela, si existe
+  status      PaymentStatus
+  amount      Float
+  currency    String        @default("PEN")
+  rawPayload  Json?
+  createdAt   DateTime      @default(now())
+}
+
+model FulfillmentEvent {
+  id        String            @id @default(uuid())
+  saleId    String
+  sale      Sale              @relation(fields: [saleId], references: [id])
+  status    FulfillmentStatus
+  note      String?
+  createdAt DateTime          @default(now())
+}
