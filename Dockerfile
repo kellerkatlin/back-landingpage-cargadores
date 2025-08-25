@@ -35,4 +35,4 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 # Ejecuta Prisma migrate con manejo de errores explícito
-CMD ["sh", "-c", "npx prisma migrate deploy || (echo '[ERROR] Prisma migrate failed' && exit 1); node dist/src/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy || (echo '[ERROR] Prisma migrate failed' && exit 1); node dist/main"]
