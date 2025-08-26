@@ -1,18 +1,9 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Query,
-  Body,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Param, Patch, Query, Body } from '@nestjs/common';
 
-import { SimpleAuthGuard } from '../auth/simple-auth.guard';
 import { PaymentStatus, FulfillmentStatus } from '@prisma/client';
 import { SaleService } from 'src/sale/sale.service';
 
-@UseGuards(SimpleAuthGuard)
+// @UseGuards(SimpleAuthGuard)
 @Controller('admin')
 export class AdminController {
   constructor(private readonly sales: SaleService) {}

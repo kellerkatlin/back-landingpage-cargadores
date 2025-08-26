@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
@@ -8,12 +8,6 @@ export class CustomerService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateCustomerDto) {
-    const existing = await this.prisma.customer.findUnique({
-      where: { email: dto.email },
-    });
-    if (existing) {
-      throw new BadRequestException('El email ya está registrado.');
-    }
     return this.prisma.customer.create({ data: dto });
   }
 

@@ -41,7 +41,7 @@ export class MpService {
 
     if (input.back_urls) {
       body.back_urls = input.back_urls;
-      // body.auto_return = 'approved'; // Úsalo solo si SÍ tienes back_urls válidas
+      body.auto_return = 'approved'; // Úsalo solo si SÍ tienes back_urls válidas
     }
 
     return pref.create({ body });

@@ -80,7 +80,7 @@ export class PaymentsController {
         : undefined; // 👈 si no hay FRONT, no enviamos back_urls
 
     const pref = await this.mp.createPreference({
-      title: `Venta #${sale.id}`,
+      title: `Venta Cargador iPhone`,
       quantity: 1, // un solo ítem, total en unit_price
       unit_price: sale.totalAmount,
       external_reference: sale.id,
